@@ -48,8 +48,8 @@ CineTicket é uma plataforma web completa para compra de ingressos de cinema e e
 ### Execução 
 ```bash
 # Clone o repositório
-git clone <repository-url>
-cd cine-ticket
+git clone <https://github.com/kalil03/Cine-Ticket.git>
+cd Cine-Ticket
 
 # Execute com Docker
 docker compose -f docker-compose.dev.yml up --build
@@ -113,6 +113,22 @@ docker compose exec backend npx prisma migrate reset --force
 │   Port: 3000    │    │   Port: 3001    │    │   (Prisma)      │
 └─────────────────┘    └─────────────────┘    └─────────────────┘
 ```
+## Demonstração
+
+### Home Page
+![Home Page](public/screenshots/index.png)
+
+### Detalhes do Filme e Sessões
+![Detalhes do Filme](public/screenshots/sessoes.png)
+
+### Eventos
+![Eventos](public/screenshots/selecaodeeventos.png)
+
+### Pagamento
+![Pagamento](public/screenshots/pagamentos.png)
+
+### Em Alta
+![Em Alta](public/screenshots/emalta.png)
 
 ## Equipe
 
@@ -120,7 +136,7 @@ docker compose exec backend npx prisma migrate reset --force
 - **João Pedro** 
 - **Kalil**
 
-## Lice
+## Licença
 Este projeto está sob a licença MIT.
 
 ---
