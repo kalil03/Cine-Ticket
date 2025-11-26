@@ -45,6 +45,20 @@ CineTicket é uma plataforma web completa para compra de ingressos de cinema e e
   - `TMDB_API_KEY` e `TMDB_ACCESS_TOKEN` - Para sincronizar filmes do TMDB
   - `TICKETMASTER_API_KEY` (e opcionalmente `TICKETMASTER_API_SECRET`) - Para sincronizar eventos públicos do Ticketmaster (Brasil)
 
+### Configuração de Ambiente
+
+1. Navegue até a pasta do backend:
+   ```bash
+   cd backend
+   ```
+
+2. Copie o arquivo de exemplo:
+   ```bash
+   cp .env.example .env
+   ```
+
+3. Edite o arquivo `.env` com suas chaves de API.
+
 ### Execução 
 ```bash
 # Clone o repositório
