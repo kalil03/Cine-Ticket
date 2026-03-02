@@ -25,6 +25,23 @@ class ApiService {
   constructor() {
     this.baseURL = API_BASE_URL;
     this.tmdbBaseURL = getTMDBBaseURL();
+    this.tmBaseURL = typeof window === 'undefined' ? '' : '';
+  }
+
+  // Helper para chamar /api/ticketmaster/* (Next.js route, sem backend)
+  async tmRequest(path) {
+    const base = typeof window === 'undefined'
+      ? (process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:10000')
+      : '';
+    const url = `${base}/api/ticketmaster/${path}`;
+    try {
+      const response = await fetch(url, { headers: { 'Content-Type': 'application/json' } });
+      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      return await response.json();
+    } catch (error) {
+      console.error('Ticketmaster API Error:', error);
+      throw error;
+    }
   }
 
   async request(endpoint, options = {}) {
@@ -257,7 +274,7 @@ class ApiService {
     });
   }
 
-  // Ticketmaster endpoints
+  // Ticketmaster endpoints — chamam /api/ticketmaster/* (Next.js API route, sem backend Express)
   async getTicketmasterEvents(params = {}) {
     const queryParams = new URLSearchParams();
     if (params.page !== undefined) queryParams.append('page', params.page);
@@ -270,11 +287,11 @@ class ApiService {
     if (params.sort) queryParams.append('sort', params.sort);
 
     const queryString = queryParams.toString();
-    return this.request(`/ticketmaster/events${queryString ? `?${queryString}` : ''}`);
+    return this.tmRequest(`events${queryString ? `?${queryString}` : ''}`);
   }
 
   async getTicketmasterEventDetails(id) {
-    return this.request(`/ticketmaster/event/${id}`);
+    return this.tmRequest(`event/${id}`);
   }
 
   async syncTicketmasterEvent(ticketmasterId) {
