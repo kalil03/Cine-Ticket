@@ -40,7 +40,9 @@ app.get('/health', (req, res) => {
     res.json({ status: 'ok' });
 });
 
-const PORT = process.env.PORT || 3001;
+// Força a porta 3001 independente da variável PORT global (para usar com Next.js no mesmo container)
+const PORT = 3001;
+
 app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+    console.log(`✅ Backend Express rodando internamente na porta ${PORT}`);
 });
