@@ -14,7 +14,15 @@ exports.getMovies = async (req, res) => {
 exports.getMovieById = async (req, res) => {
     try {
         const { id } = req.params;
-        const movie = await prisma.movie.findUnique({ where: { id: parseInt(id) } });
+        const parsedId = parseInt(id);
+        const movie = await prisma.movie.findFirst({
+            where: {
+                OR: [
+                    { id: parsedId },
+                    { tmdbId: parsedId }
+                ]
+            }
+        });
         if (!movie) return res.status(404).json({ error: 'Movie not found' });
         res.json(movie);
     } catch (error) {

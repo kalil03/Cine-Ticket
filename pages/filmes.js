@@ -39,6 +39,11 @@ export default function Filmes() {
 
         try {
           const localMovies = await api.getMovies();
+
+          if (!localMovies || localMovies.length === 0) {
+            throw new Error('Banco local vazio (ou erro). Indo para TMDB...');
+          }
+
           moviesData = localMovies.map(movie => {
             let posterPath = movie.posterPath || movie.imageUrl || null;
             if (posterPath) {
