@@ -16,6 +16,9 @@ RUN npm install --prefix backend
 # Copia todo o código
 COPY . .
 
+# Gera o Prisma Client (necessário em produção)
+RUN cd backend && npx prisma generate
+
 # Build do Next.js (frontend)
 RUN npm run build
 
