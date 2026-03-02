@@ -10,9 +10,21 @@ const getBaseURL = () => {
 
 const API_BASE_URL = getBaseURL();
 
+// TMDB usa sempre rotas Next.js API (/api/tmdb/*) — independente do backend Express
+const getTMDBBaseURL = () => {
+  if (typeof window === 'undefined') {
+    // SSR: precisa de URL absoluta
+    return process.env.NEXT_PUBLIC_SITE_URL
+      ? `${process.env.NEXT_PUBLIC_SITE_URL}/api/tmdb`
+      : 'http://localhost:10000/api/tmdb';
+  }
+  return '/api/tmdb';
+};
+
 class ApiService {
   constructor() {
     this.baseURL = API_BASE_URL;
+    this.tmdbBaseURL = getTMDBBaseURL();
   }
 
   async request(endpoint, options = {}) {
@@ -168,41 +180,53 @@ class ApiService {
     });
   }
 
-  // TMDB endpoints
+  // TMDB endpoints — chamam /api/tmdb/* (Next.js API routes, sem depender do backend Express)
+  async tmdbRequest(endpoint) {
+    const url = `${this.tmdbBaseURL}${endpoint}`;
+    try {
+      const response = await fetch(url, { headers: { 'Content-Type': 'application/json' } });
+      if (!response.ok) throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      return await response.json();
+    } catch (error) {
+      console.error('TMDB API Error:', error);
+      throw error;
+    }
+  }
+
   async getTMDBPopular(page = 1) {
-    return this.request(`/tmdb/popular?page=${page}`);
+    return this.tmdbRequest(`/popular?page=${page}`);
   }
 
   async getTMDBNowPlaying(page = 1) {
-    return this.request(`/tmdb/now-playing?page=${page}`);
+    return this.tmdbRequest(`/now-playing?page=${page}`);
   }
 
   async getTMDBUpcoming(page = 1) {
-    return this.request(`/tmdb/upcoming?page=${page}`);
+    return this.tmdbRequest(`/upcoming?page=${page}`);
   }
 
   async getTMDBTopRated(page = 1) {
-    return this.request(`/tmdb/top-rated?page=${page}`);
+    return this.tmdbRequest(`/top-rated?page=${page}`);
   }
 
   async getTMDBTrending(page = 1, timeWindow = 'week') {
-    return this.request(`/tmdb/trending?page=${page}&time_window=${timeWindow}`);
+    return this.tmdbRequest(`/trending?page=${page}&time_window=${timeWindow}`);
   }
 
   async getTMDBFeatured() {
-    return this.request('/tmdb/featured');
+    return this.tmdbRequest('/featured');
   }
 
   async searchTMDBMovies(query, page = 1) {
-    return this.request(`/tmdb/search?query=${encodeURIComponent(query)}&page=${page}`);
+    return this.tmdbRequest(`/search?query=${encodeURIComponent(query)}&page=${page}`);
   }
 
   async getTMDBGenres() {
-    return this.request('/tmdb/genres');
+    return this.tmdbRequest('/genres');
   }
 
   async getTMDBMovieDetails(id) {
-    return this.request(`/tmdb/movie/${id}`);
+    return this.tmdbRequest(`/movie/${id}`);
   }
 
   async syncTMDBMovie(tmdbId) {
