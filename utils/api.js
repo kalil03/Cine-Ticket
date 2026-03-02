@@ -1,9 +1,11 @@
 const getBaseURL = () => {
   if (typeof window === 'undefined') {
-    return process.env.INTERNAL_API_URL || process.env.NEXT_PUBLIC_API_URL || 'http://backend:3001';
+    // Server-side (SSR): chama o backend diretamente
+    return process.env.INTERNAL_API_URL || process.env.BACKEND_URL || 'http://localhost:3001';
   }
 
-  return process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+  // Client-side: usa proxy do Next.js para evitar CORS e não expor URL do backend
+  return '/api-backend';
 };
 
 const API_BASE_URL = getBaseURL();
