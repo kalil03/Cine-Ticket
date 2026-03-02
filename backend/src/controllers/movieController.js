@@ -6,7 +6,8 @@ exports.getMovies = async (req, res) => {
         const movies = await prisma.movie.findMany();
         res.json(movies);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching movies' });
+        console.error('getMovies error:', error.message);
+        res.json([]); // DB não disponível, retorna vazio
     }
 };
 
@@ -17,7 +18,8 @@ exports.getMovieById = async (req, res) => {
         if (!movie) return res.status(404).json({ error: 'Movie not found' });
         res.json(movie);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching movie' });
+        console.error('getMovieById error:', error.message);
+        res.status(404).json({ error: 'Movie not found' }); // Tratar como não encontrado
     }
 };
 

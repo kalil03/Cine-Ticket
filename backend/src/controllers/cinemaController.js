@@ -5,7 +5,8 @@ exports.getCinemas = async (req, res) => {
         const cinemas = await prisma.cinema.findMany();
         res.json(cinemas);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching cinemas' });
+        console.error('getCinemas error:', error.message);
+        res.json([]); // DB não disponível
     }
 };
 

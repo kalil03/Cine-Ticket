@@ -5,7 +5,8 @@ exports.getEvents = async (req, res) => {
         const events = await prisma.event.findMany();
         res.json(events);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching events' });
+        console.error('getEvents error:', error.message);
+        res.json([]); // DB não disponível
     }
 };
 
@@ -16,7 +17,8 @@ exports.getEventById = async (req, res) => {
         if (!event) return res.status(404).json({ error: 'Event not found' });
         res.json(event);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching event' });
+        console.error('getEventById error:', error.message);
+        res.status(404).json({ error: 'Event not found' });
     }
 };
 

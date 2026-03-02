@@ -7,7 +7,8 @@ exports.getSessions = async (req, res) => {
         });
         res.json(sessions);
     } catch (error) {
-        res.status(500).json({ error: 'Error fetching sessions' });
+        console.error('getSessions error:', error.message);
+        res.json([]); // DB não disponível
     }
 };
 

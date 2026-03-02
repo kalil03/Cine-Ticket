@@ -3,10 +3,10 @@ const axios = require('axios');
 class TicketmasterService {
   constructor() {
     if (!process.env.TICKETMASTER_API_KEY) {
-      throw new Error('TICKETMASTER_API_KEY não está configurada. Defina-a no backend/.env ou nas variáveis do container.');
+      console.warn('⚠️  TICKETMASTER_API_KEY não configurada. Rotas Ticketmaster do backend retornarão erro.');
     }
 
-    this.apiKey = process.env.TICKETMASTER_API_KEY;
+    this.apiKey = process.env.TICKETMASTER_API_KEY || '';
     this.baseURL = 'https://app.ticketmaster.com/discovery/v2';
 
     this.client = axios.create({
@@ -14,6 +14,7 @@ class TicketmasterService {
       timeout: 10000
     });
   }
+
 
   buildParams(params = {}) {
     const query = {
